@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Switch",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:\\devkitPro\\libnx\\include",
+                "C:\\devkitPro\\portlibs\\switch\\include"
+            ],
+            "defines": [
+                "__SWITCH__"
+            ],
+            "compilerPath": "C:\\devkitPro\\devkitA64\\bin\\aarch64-none-elf-g++.exe -fno-rtti -fno-exceptions -std=gnu++17",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

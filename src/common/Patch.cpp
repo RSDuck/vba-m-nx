@@ -13,7 +13,7 @@
 #if defined(BSD) || defined(__NetBSD__)
 #include <sys/param.h>
 #endif
-#if defined(__APPLE__) || defined(BSD) || defined(__NetBSD__)
+#if defined(__APPLE__) || defined(BSD) || defined(__NetBSD__) || defined(__SWITCH__)
 typedef off_t __off64_t; /* off_t is 64 bits on BSD. */
 #define fseeko64 fseeko
 #define ftello64 ftello

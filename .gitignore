@@ -15,3 +15,9 @@ dependencies/*
 
 # mac finder crap
 *.DS_Store
+
+*.elf
+*.nacp
+*.nro
+*.nso
+*.pfs0
