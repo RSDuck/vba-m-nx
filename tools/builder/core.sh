@@ -24,6 +24,16 @@ case "\$CC" in
         ;;
     *)
         if command -v ccache >/dev/null; then
+            case "\$REQUIRED_CMAKE_ARGS" in
+                *ccache*)
+                    :
+                    ;;
+                *)
+                    REQUIRED_CMAKE_ARGS="\$REQUIRED_CMAKE_ARGS -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER=\$CC -DCMAKE_CXX_COMPILER=\$CXX"
+                    ;;
+            esac
+            export CC_ORIG=\$CC
+            export CXX_ORIG=\$CXX
             export CC="ccache \$CC"
             export CXX="ccache \$CXX"
         fi
@@ -101,7 +111,7 @@ DISTS=$DISTS'
     xz              https://tukaani.org/xz/xz-5.2.3.tar.gz                                                      lib/liblzma.a
     unzip           https://downloads.sourceforge.net/project/infozip/UnZip%206.x%20%28latest%29/UnZip%206.0/unzip60.tar.gz     bin/unzip
     zip             https://downloads.sourceforge.net/project/infozip/Zip%203.x%20%28latest%29/3.0/zip30.tar.gz                 bin/zip
-    openssl         https://www.openssl.org/source/openssl-1.0.2l.tar.gz                                        lib/libssl.a
+    openssl         https://www.openssl.org/source/openssl-1.0.2o.tar.gz                                        lib/libssl.a
     cmake           https://cmake.org/files/v3.10/cmake-3.10.0-rc3.tar.gz                                       bin/cmake
     zlib            https://zlib.net/zlib-1.2.11.tar.gz                                                         lib/libz.a
     m4              http://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.xz                                                  bin/m4
@@ -115,7 +125,7 @@ DISTS=$DISTS'
     gettext         http://ftp.gnu.org/pub/gnu/gettext/gettext-0.19.8.1.tar.xz                                  lib/libintl.a
     getopt          http://frodo.looijaard.name/system/files/software/getopt/getopt-1.1.6.tar.gz                bin/getopt
     gsed            http://ftp.gnu.org/gnu/sed/sed-4.4.tar.xz                                                   bin/sed
-    bison           https://ftp.gnu.org/gnu/bison/bison-3.0.4.tar.xz                                            bin/bison
+    bison           https://ftp.gnu.org/gnu/bison/bison-3.0.5.tar.xz                                            bin/bison
     texinfo         http://ftp.gnu.org/gnu/texinfo/texinfo-6.5.tar.xz                                           bin/makeinfo
     flex-2.6.3      https://github.com/westes/flex/releases/download/v2.6.3/flex-2.6.3.tar.gz                   bin/flex
     flex            https://github.com/westes/flex/archive/e7d45afc6aeb49745f17d21ddba4848e0c0118fc.tar.gz      bin/flex
@@ -127,8 +137,8 @@ DISTS=$DISTS'
     pcre            https://ftp.pcre.org/pub/pcre/pcre-8.41.tar.bz2                                             lib/libpcre.a
     libffi          ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz                                         lib/libffi.a
     c2man           http://www.ciselant.de/c2man/c2man-2.0@42.tar.gz                                            bin/c2man
-    libxml2         ftp://xmlsoft.org/libxml2/libxml2-2.9.7.tar.gz                                              lib/libxml2.a
-    libxslt         https://git.gnome.org/browse/libxslt/snapshot/libxslt-1.1.32-rc1.tar.xz                     lib/libxslt.a
+    libxml2         ftp://xmlsoft.org/libxml2/libxml2-2.9.8.tar.gz                                              lib/libxml2.a
+    libxslt         https://github.com/GNOME/libxslt/archive/v1.1.33-rc1.tar.gz                                 lib/libxslt.a
     XML-NamespaceSupport https://cpan.metacpan.org/authors/id/P/PE/PERIGRIN/XML-NamespaceSupport-1.12.tar.gz    perl5/lib/perl5/XML/NamespaceSupport.pm
     XML-SAX-Base    https://cpan.metacpan.org/authors/id/G/GR/GRANTM/XML-SAX-Base-1.09.tar.gz                   perl5/lib/perl5/XML/SAX/Base.pm
     XML-SAX         https://cpan.metacpan.org/authors/id/G/GR/GRANTM/XML-SAX-0.99.tar.gz                        perl5/lib/perl5/XML/SAX.pm
@@ -137,12 +147,13 @@ DISTS=$DISTS'
     libpng          https://download.sourceforge.net/libpng/libpng-1.6.32.tar.xz                                lib/libpng.a
     libjpeg-turbo   https://github.com/libjpeg-turbo/libjpeg-turbo/archive/1.5.2.tar.gz                         lib/libjpeg.a
     libtiff         http://download.osgeo.org/libtiff/tiff-4.0.9.tar.gz                                         lib/libtiff.a
+#    libcroco        http://ftp.gnome.org/pub/gnome/sources/libcroco/0.6/libcroco-0.6.12.tar.xz                  lib/libcroco-0.6.a
     freetype        http://download.savannah.gnu.org/releases/freetype/freetype-2.8.tar.bz2                     lib/libfreetype.a
     fontconfig      https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.6.tar.bz2           lib/libfontconfig.a
     libgd           https://github.com/libgd/libgd/releases/download/gd-2.2.4/libgd-2.2.4.tar.xz                lib/libgd.a
     dejavu          https://downloads.sourceforge.net/project/dejavu/dejavu/2.37/dejavu-fonts-ttf-2.37.tar.bz2  share/fonts/dejavu/DejaVuSansMono.ttf
     liberation      https://releases.pagure.org/liberation-fonts/liberation-fonts-ttf-2.00.1.tar.gz             share/fonts/liberation/LiberationMono-Regular.ttf
-    urw             http://downloads.ghostscript.com/public/fonts/urw-base35-v1.10.zip                          share/fonts/urw/a010013l.pfm
+    urw             http://git.ghostscript.com/?p=urw-core35-fonts.git;a=snapshot;h=91edd6ece36e84a1c6d63a1cf63a1a6d84bd443a;sf=tgz share/fonts/urw/URWBookman-Light.ttf
     graphviz        https://gitlab.com/graphviz/graphviz/repository/archive.tar.bz2?ref=bd97cff688f7a7b85b6f1262e14eb1cac0862fcd    bin/dot_static
     docbook4.2      http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip                                                    share/xml/docbook/schema/dtd/4.2/catalog.xml
     docbook4.1.2    http://www.docbook.org/xml/4.1.2/docbkx412.zip                                                        share/xml/docbook/schema/dtd/4.1.2/catalog.xml
@@ -285,7 +296,7 @@ DIST_PRE_BUILD="$DIST_PRE_BUILD
 "
 
 DIST_POST_BUILD="$DIST_POST_BUILD
-    harfbuzz        rebuild_dist freetype;
+    harfbuzz        rebuild_dist freetype --with-harfbuzz=yes;
     flex-2.6.3      build_dist flex || :;
     glib            rebuild_dist gettext --without-included-glib --without-included-libxml;
     graphviz        (cd '$BUILD_ROOT/root/bin'; path_exists dot_static && ! path_exists dot && ln -sf '$BUILD_ROOT/root/bin/dot_static' ./dot || :)
@@ -303,7 +314,7 @@ DIST_POST_CONFIGURE="$DIST_POST_CONFIGURE
 
 DIST_CONFIGURE_OVERRIDES="$DIST_CONFIGURE_OVERRIDES
     openssl     ./config no-shared --prefix=/usr --openssldir=/etc/ssl
-    cmake       ./configure --prefix=/usr --no-qt-gui
+    cmake       ./configure --prefix=/usr --no-qt-gui --parallel=\$NUM_CPUS --\"\$(set -- \$CC; if [ \"\$1\" = ccache ]; then echo enable; else echo disable; fi)\"-ccache
     zlib        ./configure --static --prefix=/usr
     XML-SAX     echo no | PERL_MM_USE_DEFAULT=0 perl Makefile.PL
     wxwidgets   ./configure $REQUIRED_CONFIGURE_ARGS --disable-shared --prefix=/usr --enable-stl --disable-precomp-headers --enable-cxx11 --enable-permissive --with-opengl --with-libpng
@@ -337,7 +348,7 @@ DIST_ARGS="$DIST_ARGS
     gettext     --with-included-gettext --with-included-glib --with-included-libcroco --with-included-libunistring --with-included-libxml --disable-curses CPPFLAGS=\"\$CPPFLAGS -DLIBXML_STATIC\"
     pkgconfig   --with-internal-glib --with-libiconv=gnu
     pcre        --enable-utf8 --enable-pcre8 --enable-pcre16 --enable-pcre32 --enable-unicode-properties --enable-pcregrep-libz --enable-pcregrep-libbz2 --enable-jit
-    libxslt     --without-python
+    libxslt     --without-python --without-crypto
     libgd       --without-xpm
     fontconfig  --with-baseconfigdir=/etc/fonts
     graphviz    --disable-ltdl --without-x CFLAGS=\"-include \$PWD/declspec.h $CFLAGS\"
@@ -348,6 +359,7 @@ DIST_ARGS="$DIST_ARGS
     XML-Parser  EXPATINCPATH='$BUILD_ROOT/root/include' EXPATLIBPATH='$BUILD_ROOT/root/lib'
     doxygen     -DICONV_ACCEPTS_NONCONST_INPUT:BOOL=FALSE -DICONV_ACCEPTS_CONST_INPUT:BOOL=TRUE
     sfml        -DSFML_USE_SYSTEM_DEPS=TRUE
+    libcroco    --disable-Bsymbolic
     freetype    --with-harfbuzz=no
     harfbuzz    --with-cairo=no --with-icu=no
     flac        --disable-ogg
@@ -374,8 +386,9 @@ DIST_ARGS="$DIST_ARGS
 
 DIST_BARE_MAKE_ARGS='CC="$CC"'
 
+# have to disable ccache for openssl
 DIST_MAKE_ARGS="$DIST_MAKE_ARGS
-    openssl     CC=\"\$CC -fPIC\"
+    openssl     CC=\"\$CC_ORIG -fPIC\" CXX=\"\$CXX_ORIG -fPIC\"
     getopt      LDFLAGS=\"\$LDFLAGS -lintl -liconv\" CFLAGS=\"\$CFLAGS\"
     bzip2       libbz2.a bzip2 bzip2recover CFLAGS=\"\$CFLAGS\" LDFLAGS=\"\$LDFLAGS\"
     unzip       generic2
@@ -924,7 +937,10 @@ dist_file() {
     # remove query string stuff
     dist_file=${dist_file%\?*}
 
-    putsln "$BUILD_ROOT/downloads/$current_dist-$dist_file"
+    # set full path
+    dist_file="$BUILD_ROOT/downloads/$current_dist-$dist_file"
+
+    puts "$(resolve_link "$dist_file")"
 }
 
 dist_dir() {
@@ -956,7 +972,39 @@ download_dist() {
     if [ ! -f "$dist_file" ]; then
         puts "${NL}[32mFetching [1;35m$current_dist[0m: [1;34m$dist_url[0m${NL}${NL}"
         $CURL -SsL "$dist_url" -o "$dist_file"
+
+        case "$dist_file" in
+            *.*)
+                ;;
+            *)
+                # no extension, try to figure out if zip or .tar.gz
+
+                new_dist_file=$(echo "$dist_file" | sed 's/-* *$//') # remove trailing dash and spaces
+
+                case "$(file "$dist_file")" in
+                    *gzip*)
+                        mv "$dist_file" "$new_dist_file.tar.gz"
+                        ln -sf "$new_dist_file.tar.gz" "$dist_file"
+                        ;;
+                    *Zip\ archive*)
+                        mv "$dist_file" "$new_dist_file.zip"
+                        ln -sf "$new_dist_file.zip" "$dist_file"
+                        ;;
+                esac
+
+                ;;
+        esac
     fi
+}
+
+rtrim() {
+    str=$1
+
+    while [ "$str" != "${str% }" ]; do
+        str="${str% }"
+    done
+
+    puts "$str"
 }
 
 download_failed() {
@@ -977,7 +1025,7 @@ unpack_dist() {
     dist_dir="$DISTS_DIR/$current_dist"
 
     if [ ! -f "$dist_file" ]; then
-        error "unpack_dist: missing dist file fir dist '$current_dist': '$dist_file'"
+        error "unpack_dist: missing dist file for dist '$current_dist': '$dist_file'"
     fi
 
     puts "${NL}[32mUnpacking [1;35m$current_dist[0m${NL}${NL}"
@@ -1055,12 +1103,12 @@ start_job() {
 
 write_job_exit_status() {
     _exit_status=$?
-    putsln "job_exited='$_exit_status'" >> "$TMP_DIR/job_status/$current_job_pid"
+    putsln "job_exited='$_exit_status'" >> "$TMP_DIR/job_status/$current_job_pid" 2>/dev/null
 }
 
 write_job_info() {
     [ -n "$1" ] || die 'write_job_info: key name required'
-    putsln "${1}='${2}'" >> "$TMP_DIR/job_status/$current_job_pid"
+    putsln "${1}='${2}'" >> "$TMP_DIR/job_status/$current_job_pid" 2>/dev/null
 }
 
 write_job_output() {
@@ -2052,7 +2100,16 @@ dist_patch() {
     current_dist=$1
     [ -n "$current_dist" ] || die 'dist_patch: dist name required'
 
+    _patch_level=-p1
+
     for _patch_url in $(table_line DIST_PATCHES $current_dist); do
+        case "$_patch_url" in
+            -p*)
+                _patch_level=$_patch_url
+                continue
+                ;;
+        esac
+
         _patch_file=${_patch_url##*/}
         _patch_file=${_patch_file%%\?*}
 
@@ -2060,7 +2117,10 @@ dist_patch() {
             puts "${NL}[32mApplying patch [1;34m$_patch_url[0m to [1;35m$current_dist[0m${NL}${NL}"
 
             $CURL -SsL "$_patch_url" -o "$_patch_file"
-            patch -l -p1 < "$_patch_file"
+            patch -l $_patch_level < "$_patch_file"
+
+            # reset patch level to 1 which is default
+            _patch_level=-p1
         fi
 
         done_msg
@@ -2536,8 +2596,39 @@ putsln() {
 
 path_exists() {
     [ -z "$1" ] && return 1
+
+    if [ -e "$1" ] || [ -L "$1" ] || [ -d "$1" ]; then
+        return 0
+    fi
+
     # check unquoted versions in case of globs
-    [ -e "$1" ] || [ -L "$1" ] || [ -d "$1" ] || [ -e $1 ] || [ -L $1 ] || [ -d $1 ]
+    # but must escape spaces first
+    escaped=$(gsub ' ' '\ ' "$1")
+    [ -e $escaped ] || [ -L $escaped ] || [ -d $escaped ]
+}
+
+gsub() {
+    match=$1
+    repl=$2
+    shift; shift;
+
+    res=
+    str="$@"
+
+    while [ -n "$str" ]; do
+        case "$str" in
+            *$match*)
+                res="$res${str%%$match*}$repl"
+                str="${str#*$match}"
+                ;;
+            *)
+                res="$res$str"
+                break
+                ;;
+        esac
+    done
+
+    printf '%s' "$res"
 }
 
 # on msys2 `ln -sf` to an existing link silently fails

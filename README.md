@@ -15,7 +15,9 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 [![Join the chat at https://gitter.im/visualboyadvance-m/Lobby](https://badges.gitter.im/visualboyadvance-m/Lobby.svg)](https://gitter.im/visualboyadvance-m/Lobby)
-[![Build Status](https://tea-ci.org/api/badges/visualboyadvance-m/visualboyadvance-m/status.svg)](https://tea-ci.org/visualboyadvance-m/visualboyadvance-m)
+[![Build Status](https://travis-ci.org/visualboyadvance-m/visualboyadvance-m.svg?branch=master)](https://travis-ci.org/visualboyadvance-m/visualboyadvance-m)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/16096/badge.svg)](https://scan.coverity.com/projects/visualboyadvance-m-visualboyadvance-m)
+
 # Visual Boy Advance - M
 
 Game Boy Advance Emulator
@@ -29,6 +31,14 @@ Daily Ubuntu packages here: https://code.launchpad.net/~sergio-br2/+archive/ubun
 Your distribution may have packages available as well, search for "vbam".
 
 It is also generally very easy to build from source, see below.
+
+## Note for Windows Users
+
+If you are having issues, try resetting your config file first.
+
+- open file explorer
+- in the location bar, type `%USERPROFILE%\AppData\Local` and press enter
+- delete the directory called `visualboyadvance-m`
 
 ## Building
 
